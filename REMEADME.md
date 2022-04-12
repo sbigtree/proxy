@@ -38,13 +38,39 @@ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.cert
 cat server.key server.cert > server.pem
 ```
 
-### 测试
+#### 创建虚拟环境
+
+```sh
+python -m venv ~/.venv/python3.9-proxy
+source ~/.venv/python3.9-proxy/bin/activate
+```
+
+#### 导出依赖包
+
+```sh
+pip freeze > requirements.txt
+```
+
+#### 安装
+
 ```shell
-curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:12345
-curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:3129
+pip install -r requirements.txt
 ```
 
 ### 启动
+
 ```shell
+# 进入虚拟环境
+source ~/.venv/python3.9-proxy/bin/activate
+# 后台启动
 python  main.py >/dev/null 2>&1 &
+# 前台启动
+python  main.py
+```
+
+### 测试
+
+```shell
+curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:12345
+curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:3129
 ```
