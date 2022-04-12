@@ -71,6 +71,6 @@ python  main.py
 ### 测试
 
 ```shell
-curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:12345
-curl https://127.0.0.1:8443 -v -k --proxy admin:qy83346348@127.0.0.1:3129
+curl https://127.0.0.1:8443 -v -k --proxy admin:pass@127.0.0.1:12345
+curl https://127.0.0.1:8443 -v -k --proxy admin:pass@127.0.0.1:3129
 ```
