@@ -141,7 +141,7 @@ class Proxy:
 async def main(port=12345, password=''):
     proxy = Proxy(password)
     log.info(f'Running on 127.0.0.1:{port}')
-    await trio.serve_tcp(proxy, port)
+    await trio.serve_tcp(proxy, port,host='0.0.0.0')
 
 
 if __name__ == '__main__':
