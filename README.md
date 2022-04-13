@@ -1,3 +1,5 @@
+一个代理服务器
+
 ### 生成证书
 
 ```shell
@@ -63,7 +65,7 @@ pip install -r requirements.txt
 # 进入虚拟环境
 source ~/.venv/python3.9-proxy/bin/activate
 # 后台启动
-python  main.py >/dev/null 2>&1 &
+python  main.py password >/dev/null 2>&1 &
 # 前台启动
 python  main.py
 ```

@@ -47,9 +47,11 @@ class Proxy:
             authorization = header.headers.get('Proxy-Authorization')
             try:
                 # authorization = authorization.split(' ')[1].encode()
-                auth = base64.b64decode(authorization.split(' ')[1].encode()).decode('utf8')
-                if auth != f'{self.password}:{self.password}' or auth != '000000:000000':
-                    raise ValueError('authorization')
+                if not header.proxy_host:
+                    auth = base64.b64decode(authorization.split(' ')[1].encode()).decode('utf8')
+                    log.info(f'auth {auth}  {self.password}')
+                    if auth != f'{self.password}:{self.password}':
+                        raise ValueError('authorization')
 
             except Exception:
                 data = b"HTTP/1.1 407 authorization\r\nContent-Type: */*\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
