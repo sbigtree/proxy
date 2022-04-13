@@ -32,9 +32,12 @@ else
 fi
 
 
+
 ### zsh
 cd $WORK_DIR
 echo -e "\033[42m[正在安装 ohmyzsh]\033[0m"
 yum -y install zsh
 chmod +x ./ohmyzsh.sh
 ./ohmyzsh.sh
+
+iptables -F # 删除所有规则
