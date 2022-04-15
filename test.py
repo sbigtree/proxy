@@ -43,9 +43,6 @@ async def heart():
 async def worker():
     counter = count()
     while True:
-        # for i in range(5):
-        #     await trio.sleep(1)
-        #     aque.put_nowait(next(counter))
         async with trio.open_nursery() as nursery:
             while not aque.empty():
                 task = aque.get_nowait()
