@@ -31,7 +31,9 @@ else
 
 fi
 
-
+yum install -y iptables-services
+iptables -F
+service iptables save
 
 ### zsh
 cd $WORK_DIR

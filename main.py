@@ -33,10 +33,12 @@ class Proxy:
         """转发者 到 客户端
         """
         async for data in forwarder:
+            # 接收转发着的数据
             # log.info(f'recv: {data!r}')
             await client.send_all(data)
-        # await forwarder.aclose()
-        log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
+            if data == b'':
+                log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
+                return
 
     async def handle(self, conn: trio.SocketStream, *args, **kwargs):
         """

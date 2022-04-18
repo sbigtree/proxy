@@ -339,7 +339,7 @@ class Header():
     """
 
     def __init__(self, data: bytes):
-        log.info(f'header \n  {data!r}')
+        # log.debug(f'header \n  {data!r}')
         self.data = data
         data = data.split(b'\r\n\r\n')
         self.header: bytes = data[0] # http协议头
