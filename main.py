@@ -26,7 +26,7 @@ class Proxy:
             log.info(f'recv: {data!r}')
             await forwarder.send_all(data)
         # await forwarder.aclose()
-        log.info('接收完成')
+        log.info(f'{receiver.socket.getpeername()} 接收完成')
 
     async def handle(self, conn: trio.SocketStream,*args,**kwargs ):
         """
@@ -49,7 +49,7 @@ class Proxy:
                 # authorization = authorization.split(' ')[1].encode()
                 if not header.proxy_host:
                     auth = base64.b64decode(authorization.split(' ')[1].encode()).decode('utf8')
-                    log.info(f'auth {auth}  {self.password}')
+                    # log.info(f'auth {auth}  {self.password}')
                     if auth != f'{self.password}:{self.password}':
                         raise ValueError('authorization')
 
