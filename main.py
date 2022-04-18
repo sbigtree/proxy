@@ -34,7 +34,7 @@ class Proxy:
         """
         ident = next(self.counter)
         log.info(f"echo_server {ident}: started")
-        # d = conn.socket.family
+        addr = conn.socket.getpeername()
         try:
             # 链接进来的的第一次数据，请求头
             data = await conn.receive_some()
