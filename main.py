@@ -142,7 +142,6 @@ class Proxy:
             # down the whole program. If the exception is KeyboardInterrupt,
             # that's what we want, but otherwise maybe not...
             log.info(f"echo_server {ident}: crashed: {exc!r}")
-            # await forward.close()
 
     async def __call__(self, *args, **kwargs):
         # pass
