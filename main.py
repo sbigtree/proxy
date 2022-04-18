@@ -34,7 +34,7 @@ class Proxy:
         """
         async for data in forwarder:
             # 接收转发着的数据
-            log.info(f'recv: {data!r}')
+            # log.info(f'recv: {data!r}')
             await client.send_all(data)
 
         log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
