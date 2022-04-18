@@ -19,22 +19,33 @@ class Proxy:
         self.counter = count()
         self.password = password
 
-    async def recv2send(self, receiver: trio.SocketStream, forwarder: trio.SocketStream):
-        """接收 到 转发
+    async def client2forwarder(self, client: trio.SocketStream, forwarder: trio.SocketStream):
+        """客户端 到 转发
         """
-        async for data in receiver:
+        async for data in client:
+            # 接收client的要转发的数据
             # log.info(f'recv: {data!r}')
             await forwarder.send_all(data)
         # await forwarder.aclose()
-        log.info(f'{receiver.socket.getpeername()} 接收完成')
+        log.info(f'{client.socket.getsockname()} client接收完成')
 
-    async def handle(self, conn: trio.SocketStream,*args,**kwargs ):
+    async def forwarder2client(self, forwarder: trio.SocketStream, client: trio.SocketStream):
+        """转发者 到 客户端
+        """
+        async for data in forwarder:
+            # log.info(f'recv: {data!r}')
+            await client.send_all(data)
+        # await forwarder.aclose()
+        log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
+
+    async def handle(self, conn: trio.SocketStream, *args, **kwargs):
         """
         处理请求
         """
         ident = next(self.counter)
         log.info(f"echo_server {ident}: started")
         addr = conn.socket.getpeername()
+        addr = conn.socket.getsockname()
         try:
             # 链接进来的的第一次数据，请求头
             data = await conn.receive_some()
@@ -93,11 +104,11 @@ class Proxy:
                     data = b"HTTP/1.1 200 Connection Established\r\n\r\n"
                     await conn.send_all(data)
                     forwarder: trio.SocketStream = await trio.open_tcp_stream(header.host, header.port)
-                log.info(f'send: {data!r}')
+                # log.info(f'send: {data!r}')
                 # 之后转发body的加密数据
                 async with trio.open_nursery() as nursery:
-                    nursery.start_soon(self.recv2send, conn, forwarder)
-                    nursery.start_soon(self.recv2send, forwarder, conn)
+                    nursery.start_soon(self.client2forwarder, conn, forwarder)
+                    nursery.start_soon(self.forwarder2client, forwarder, conn)
             else:
                 if header.proxy_host and header.proxy_port:
                     forwarder: trio.SocketStream = await trio.open_tcp_stream(header.proxy_host, header.proxy_port)
@@ -114,8 +125,8 @@ class Proxy:
                 await forwarder.send_all(data)
                 async with trio.open_nursery() as nursery:
                     # 转发后续传输的数据
-                    nursery.start_soon(self.recv2send, conn, forwarder)
-                    nursery.start_soon(self.recv2send, forwarder, conn)
+                    nursery.start_soon(self.client2forwarder, conn, forwarder)
+                    nursery.start_soon(self.forwarder2client, forwarder, conn)
                 # async for data in forwarder:  # 这里如果是https请求，会一直循环在这等待接收数据
                 #     # http响应的
                 #     # b'HTTP/1.1 302 Moved Temporarily\r\nServer: AkamaiGHost\r\nContent-Length: 0\r\nLocation: https://steamcommunity.com/\r\nDate: Mon, 11 Apr 2022 07:34:27 GMT\r\nConnection: close\r\n\r\n'
@@ -141,7 +152,7 @@ class Proxy:
 async def main(port=12345, password=''):
     proxy = Proxy(password)
     log.info(f'Running on 127.0.0.1:{port}')
-    await trio.serve_tcp(proxy, port,host='0.0.0.0')
+    await trio.serve_tcp(proxy, port, host='0.0.0.0')
 
 
 if __name__ == '__main__':
