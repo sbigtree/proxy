@@ -23,7 +23,7 @@ class Proxy:
         """接收 到 转发
         """
         async for data in receiver:
-            log.info(f'recv: {data!r}')
+            # log.info(f'recv: {data!r}')
             await forwarder.send_all(data)
         # await forwarder.aclose()
         log.info(f'{receiver.socket.getpeername()} 接收完成')
