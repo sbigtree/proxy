@@ -56,7 +56,7 @@ class Proxy:
             except Exception:
                 data = b"HTTP/1.1 407 authorization\r\nContent-Type: */*\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
                 await conn.send_all(data)
-                await conn.aclose()
+                # await conn.aclose()
             log.info(authorization)
             if header.is_ssl:
                 # proxy = header.headers.get('proxy')
