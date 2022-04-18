@@ -34,11 +34,12 @@ class Proxy:
         """
         async for data in forwarder:
             # 接收转发着的数据
-            # log.info(f'recv: {data!r}')
+            log.info(f'recv: {data!r}')
             await client.send_all(data)
             if data == b'':
                 log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
                 return
+        await forwarder.aclose()
 
     async def handle(self, conn: trio.SocketStream, *args, **kwargs):
         """
@@ -47,7 +48,7 @@ class Proxy:
         ident = next(self.counter)
         log.info(f"echo_server {ident}: started")
         addr = conn.socket.getpeername()
-        addr = conn.socket.getsockname()
+        addr2 = conn.socket.getsockname()
         try:
             # 链接进来的的第一次数据，请求头
             data = await conn.receive_some()
@@ -70,7 +71,7 @@ class Proxy:
                 data = b"HTTP/1.1 407 authorization\r\nContent-Type: */*\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
                 await conn.send_all(data)
                 # await conn.aclose()
-            log.info(authorization)
+            # log.info(authorization)
             if header.is_ssl:
                 # proxy = header.headers.get('proxy')
                 # 源客户端 => 中转代理 => 代理 => 目标server
