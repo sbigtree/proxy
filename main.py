@@ -36,9 +36,8 @@ class Proxy:
             # 接收转发着的数据
             log.info(f'recv: {data!r}')
             await client.send_all(data)
-            if data == b'':
-                log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
-                return
+
+        log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
         await forwarder.aclose()
 
     async def handle(self, conn: trio.SocketStream, *args, **kwargs):
