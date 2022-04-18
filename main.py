@@ -11,7 +11,7 @@ from log import log
 from log.logger import init_logger
 from _models import Url, Header
 
-init_logger(__name__, debug=True, )
+init_logger('proxy', debug=True, )
 
 
 class Proxy:

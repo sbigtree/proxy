@@ -50,6 +50,18 @@ def init_logger(dir_name='logs', log_file_name='log', debug=False, join='.', log
     # 将日志记录器指定日志的格式
     formatter = logging.Formatter(format_str, datefmt=None)
 
+
+    # 为全局的日志工具对象添加日志记录器
+    # 默认日志等级的设置
+    if debug:
+        pass
+        file_level = logging.INFO
+        logger.setLevel(file_level)
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        # logging.basicConfig(level=level, format=format_str)
+
     # 创建日志记录器，指明日志保存路径,每个日志的大小，保存日志的上限
     from logging.handlers import RotatingFileHandler
     file_log_handler = RotatingFileHandler(log_file_str, maxBytes=5 * 1024 * 1024, backupCount=10)
@@ -57,17 +69,6 @@ def init_logger(dir_name='logs', log_file_name='log', debug=False, join='.', log
     file_log_handler.setLevel(file_level)
 
     file_log_handler.setFormatter(formatter)
-    # 为全局的日志工具对象添加日志记录器
-    # 默认日志等级的设置
-    if debug:
-        pass
-        level = logging.INFO
-        logger.setLevel(level)
-        handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        # logging.basicConfig(level=level, format=format_str)
-
     logger.addHandler(file_log_handler)
 
     # coloredlogs.install(logger=logger, level=level, fmt=format_str, datefmt=None, milliseconds=True)
