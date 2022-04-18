@@ -28,13 +28,13 @@ class Proxy:
         # await forwarder.aclose()
         log.info('接收完成')
 
-    async def handle(self, conn: trio.SocketStream, ):
+    async def handle(self, conn: trio.SocketStream,*args,**kwargs ):
         """
         处理请求
         """
         ident = next(self.counter)
         log.info(f"echo_server {ident}: started")
-
+        # d = conn.socket.family
         try:
             # 链接进来的的第一次数据，请求头
             data = await conn.receive_some()

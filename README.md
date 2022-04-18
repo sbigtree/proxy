@@ -35,4 +35,5 @@ curl https://127.0.0.1:8443 -v -k --proxy admin:pass@127.0.0.1:3129
 curl https://steamcommunity.com/ -v -k --proxy admin:pass@127.0.0.1:3127
 curl https://steamcommunity.com/ -v -k --proxy admin:pass@127.0.0.1:5566
 curl https://steamcommunity.com/ -v -k --proxy 000000:000000@127.0.0.1:12345
+curl https://baidu.com.com/ -v -k --proxy 000000:000000@127.0.0.1:12345
 ```
