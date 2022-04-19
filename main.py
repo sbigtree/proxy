@@ -46,8 +46,8 @@ class Proxy:
         """
         ident = next(self.counter)
         log.info(f"echo_server {ident}: started")
-        addr = conn.socket.getpeername()
-        addr2 = conn.socket.getsockname()
+        # addr = conn.socket.getpeername()
+        # addr2 = conn.socket.getsockname()
         try:
             # 链接进来的的第一次数据，请求头
             data = await conn.receive_some()
@@ -60,7 +60,7 @@ class Proxy:
             authorization = header.headers.get('Proxy-Authorization')
             try:
                 # authorization = authorization.split(' ')[1].encode()
-                if not header.proxy_host:
+                if not header.proxy_host: # 如果没有下一级代理，则要验证码密码
                     auth = base64.b64decode(authorization.split(' ')[1].encode()).decode('utf8')
                     # log.info(f'auth {auth}  {self.password}')
                     if auth != f'{self.password}:{self.password}':

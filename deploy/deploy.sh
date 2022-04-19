@@ -32,7 +32,10 @@ else
 fi
 
 yum install -y iptables-services
-iptables -F
+
+iptables -I INPUT -p tcp  --dport 12345 -j ACCEPT
+iptables -I INPUT -p tcp  --dport 5566 -j ACCEPT
+#iptables -F
 service iptables save
 
 ### zsh
