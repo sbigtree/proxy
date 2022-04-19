@@ -32,10 +32,11 @@ class Proxy:
     async def forwarder2client(self, forwarder: trio.SocketStream, client: trio.SocketStream):
         """转发者 到 客户端
         """
-        async for data in forwarder:
-            # 接收转发着的数据
-            # log.info(f'recv: {data!r}')
-            await client.send_all(data)
+        with trio.move_on_after(10):
+            async for data in forwarder:
+                # 接收转发着的数据
+                # log.info(f'recv: {data!r}')
+                await client.send_all(data)
 
         log.info(f'{forwarder.socket.getsockname()} forwarder接收完成')
         await forwarder.aclose()
@@ -122,7 +123,7 @@ class Proxy:
                 else:
                     forwarder: trio.SocketStream = await trio.open_tcp_stream(header.host, header.port)
                     data = header.data
-                log.info(f'send: {data!r}')
+                # log.info(f'send: {data!r}')
                 # 转发连接进来的第一次数据
                 await forwarder.send_all(data)
                 async with trio.open_nursery() as nursery:
