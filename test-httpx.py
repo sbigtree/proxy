@@ -13,7 +13,7 @@ proxies2 = httpx.Proxy(url='http://127.0.0.1:12345', auth=('nihao', 'nihao'), he
     'proxy': '127.0.0.1:5566'
 })
 
-# res = httpx.Client(proxies={'https': 'http://127.0.0.1:12345'}).get('http:///127.0.0.1:8443')
+# res = httpx.Client(proxies={'https://': 'http://127.0.0.1:12345'}).get('http:///127.0.0.1:8443')
 # res = httpx.Client(proxies={'https': 'http://127.0.0.1:12345'}).get('https://blog.csdn.net/')
 # session = httpx.Client(http2=False, headers=None, verify=False,proxies={'https://': 'http://127.0.0.1:12345'})
 # session = httpx.Client(http2=False, headers=None, verify=False,proxies=proxies)

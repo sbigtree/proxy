@@ -19,10 +19,14 @@ async def echo_server(server_stream: trio.SocketStream):
     # to understand when there are multiple simultaneous connections.
     ident = next(CONNECTION_COUNTER)
     print(f"echo_server {ident}: started")
+    getsockname = server_stream.socket.getsockname()
+    getpeername = server_stream.socket.getpeername()
+
     try:
         async for data in server_stream:
             print(f"echo_server {ident}: received data {data!r}")
-
+            ip = f'{getsockname} {getpeername} \r\n'
+            data += ip
             content = b"HTTP/1.1 200 OK\r\n" \
                       b"Content-Type: */*\r\n" \
                       b"Content-Length: %d\r\n" \
